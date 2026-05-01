@@ -2,335 +2,47 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Chromebook Manager Pro - Sistema de Agendamento</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Agendamento - Chromebooks Escolares</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        .transition-all {
+            transition: all 0.3s ease;
         }
-
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
+        .input-error {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
         }
-
-        .container {
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-
-        /* Header */
-        .header {
-            background: white;
-            border-radius: 20px;
-            padding: 20px 30px;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .header h1 {
-            font-size: 28px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .stats {
-            display: flex;
-            gap: 20px;
-        }
-
-        .stat-card {
-            background: #f3f4f6;
-            padding: 10px 20px;
-            border-radius: 12px;
-            text-align: center;
-        }
-
-        .stat-card .number {
-            font-size: 24px;
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        .stat-card .label {
-            font-size: 12px;
-            color: #6b7280;
-        }
-
-        /* Main Grid */
-        .main-grid {
-            display: grid;
-            grid-template-columns: 1fr 1.5fr;
-            gap: 25px;
-            margin-bottom: 25px;
-        }
-
-        @media (max-width: 1024px) {
-            .main-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Cards */
-        .card {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-        }
-
-        .card-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #1f2937;
-            border-left: 4px solid #667eea;
-            padding-left: 15px;
-        }
-
-        /* Formulário */
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #374151;
-            font-size: 14px;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px 15px;
-            border: 2px solid #e5e7eb;
-            border-radius: 12px;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 14px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-secondary {
-            background: #6b7280;
-            color: white;
-        }
-
-        .btn-danger {
-            background: #ef4444;
-            color: white;
-        }
-
-        .btn-warning {
-            background: #f59e0b;
-            color: white;
-        }
-
-        /* Tabela de Disponibilidade */
-        .availability-table {
-            width: 100%;
-            overflow-x: auto;
-        }
-
-        .availability-table table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .availability-table th,
-        .availability-table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .availability-table th {
-            background: #f9fafb;
-            font-weight: 600;
-            color: #374151;
-        }
-
-        .status-disponivel {
-            color: #10b981;
-            font-weight: 600;
-        }
-
-        .status-limitado {
-            color: #f59e0b;
-            font-weight: 600;
-        }
-
-        .status-indisponivel {
+        .error-message {
             color: #ef4444;
-            font-weight: 600;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
         }
-
-        /* Filtros */
-        .filters {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
+        .turma-option {
+            transition: all 0.2s ease;
         }
-
-        .filters input {
-            flex: 1;
-            padding: 10px 15px;
-            border: 2px solid #e5e7eb;
-            border-radius: 12px;
-            font-size: 14px;
+        .turma-option:hover {
+            background-color: #f3f4f6;
+            transform: translateX(4px);
         }
-
-        /* Tabela de Agendamentos */
-        .agendamentos-table {
-            width: 100%;
-            overflow-x: auto;
-        }
-
-        .agendamentos-table table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .agendamentos-table th,
-        .agendamentos-table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .agendamentos-table th {
-            background: #f9fafb;
-            font-weight: 600;
-            color: #374151;
-        }
-
-        .agendamentos-table tr:hover {
-            background: #f9fafb;
-            cursor: pointer;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 8px;
-        }
-
-        .icon-btn {
-            padding: 5px 10px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .btn-edit {
-            background: #3b82f6;
-            color: white;
-        }
-
-        .btn-delete {
-            background: #ef4444;
-            color: white;
-        }
-
-        /* Modal */
         .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
+            transition: all 0.3s ease;
         }
-
-        .modal-content {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
+        @keyframes highlight {
+            0% { background-color: #dbeafe; }
+            100% { background-color: transparent; }
         }
-
-        .modal-header {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 20px;
+        .agendamento-row {
+            transition: all 0.2s ease;
         }
-
-        /* Toast */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #10b981;
-            color: white;
-            padding: 12px 20px;
-            border-radius: 12px;
-            display: none;
-            z-index: 1000;
-            animation: slideIn 0.3s;
+        .agendamento-row:hover {
+            background-color: #f9fafb;
+            transform: translateX(2px);
         }
-
-        @keyframes slideIn {
+        .notification {
+            animation: slideInRight 0.3s ease-out;
+        }
+        @keyframes slideInRight {
             from {
                 transform: translateX(100%);
                 opacity: 0;
@@ -342,624 +54,1024 @@
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <h1>📱 Chromebook Manager Pro</h1>
-            <div class="stats">
-                <div class="stat-card">
-                    <div class="number" id="totalChromebooks">100</div>
-                    <div class="label">Total Disponível</div>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <!-- Cabeçalho -->
+        <div class="mb-8 text-center">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">📱 Sistema de Chromebooks</h1>
+            <p class="text-gray-600">Gerencie agendamentos de forma eficiente e colaborativa</p>
+            <div class="inline-block bg-white rounded-full px-4 py-1 mt-2 shadow-sm">
+                <span class="text-sm font-semibold text-gray-700">🎯 Limite: 36 unidades por período</span>
+            </div>
+        </div>
+
+        <!-- Indicador de Última Atualização -->
+        <div class="mb-4 text-right text-sm text-gray-500" id="ultimaAtualizacao">
+            Última atualização: agora
+        </div>
+
+        <!-- Seletor de Data para Visualização -->
+        <div class="mb-6 bg-white rounded-lg shadow-lg p-4">
+            <div class="flex items-center justify-between flex-wrap gap-4">
+                <div class="flex items-center space-x-4">
+                    <label class="font-semibold text-gray-700">📅 Visualizar disponibilidade para:</label>
+                    <input type="date" id="dataVisualizacao" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                 </div>
-                <div class="stat-card">
-                    <div class="number" id="totalAgendamentos">0</div>
-                    <div class="label">Agendamentos Hoje</div>
+                <div class="text-sm text-gray-600">
+                    💡 Dica: Selecione uma data para ver a disponibilidade específica daquele dia
                 </div>
             </div>
         </div>
 
-        <!-- Main Grid -->
-        <div class="main-grid">
-            <!-- Disponibilidade por Aula -->
-            <div class="card">
-                <div class="card-title">📊 Disponibilidade por Aula</div>
-                <div class="form-group">
-                    <label>Data para Verificação:</label>
-                    <input type="date" id="verificaData">
-                </div>
-                <div class="availability-table">
-                    <table id="tabelaDisponibilidade">
-                        <thead>
-                            <tr>
-                                <th>Aula</th>
-                                <th>Início</th>
-                                <th>Término</th>
-                                <th>Disponível</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Formulário de Agendamento -->
-            <div class="card">
-                <div class="card-title">📝 Novo Agendamento</div>
-                <form id="formAgendamento">
-                    <div class="form-group">
-                        <label>Professor *</label>
-                        <input type="text" id="professor" required placeholder="Nome do professor">
-                    </div>
-                    <div class="form-group">
-                        <label>Turma *</label>
-                        <select id="turma" required></select>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Quantidade *</label>
-                            <input type="number" id="quantidade" min="1" max="100" value="10" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Data Retirada *</label>
-                            <input type="date" id="dataRetirada" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Horário Retirada *</label>
-                            <select id="horarioRetirada" required></select>
-                        </div>
-                        <div class="form-group">
-                            <label>Horário Devolução *</label>
-                            <select id="horarioDevolucao" required></select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Observações</label>
-                        <textarea id="observacoes" rows="3" placeholder="Observações adicionais..."></textarea>
-                    </div>
-                    <div class="button-group">
-                        <button type="submit" class="btn btn-primary">➕ Adicionar</button>
-                        <button type="button" class="btn btn-secondary" onclick="limparFormulario()">🗑️ Limpar</button>
-                    </div>
-                </form>
-            </div>
+        <!-- Tabela de Disponibilidade por DATA -->
+        <div class="mb-8 overflow-x-auto bg-white rounded-lg shadow-lg">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gradient-to-r from-blue-600 to-indigo-600">
+                    <tr>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Horário</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Disponibilidade</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-white uppercase tracking-wider">Status</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelaHorarios" class="bg-white divide-y divide-gray-200"></tbody>
+            </table>
         </div>
 
-        <!-- Filtros -->
-        <div class="card" style="margin-bottom: 25px;">
-            <div class="card-title">🔍 Filtros de Pesquisa</div>
-            <div class="filters">
-                <input type="text" id="filtroProfessor" placeholder="Filtrar por professor...">
-                <input type="date" id="filtroData" placeholder="Filtrar por data...">
-                <button class="btn btn-primary" onclick="aplicarFiltros()">Aplicar</button>
-                <button class="btn btn-secondary" onclick="limparFiltros()">Limpar</button>
-                <button class="btn btn-warning" onclick="exportarRelatorio()">📎 Exportar</button>
-            </div>
+        <!-- Tabs de Navegação -->
+        <div class="mb-6 border-b border-gray-200">
+            <nav class="flex space-x-4">
+                <button onclick="showTab('agendar')" class="tab-btn py-2 px-4 font-semibold text-gray-600 hover:text-blue-600 border-b-2 border-transparent transition-all" data-tab="agendar">
+                    ➕ Novo Agendamento
+                </button>
+                <button onclick="showTab('listar')" class="tab-btn py-2 px-4 font-semibold text-gray-600 hover:text-blue-600 border-b-2 border-transparent transition-all" data-tab="listar">
+                    📋 Lista de Agendamentos
+                </button>
+                <button onclick="showTab('turmas')" class="tab-btn py-2 px-4 font-semibold text-gray-600 hover:text-blue-600 border-b-2 border-transparent transition-all" data-tab="turmas">
+                    🏫 Gerenciar Turmas
+                </button>
+            </nav>
         </div>
 
-        <!-- Lista de Agendamentos -->
-        <div class="card">
-            <div class="card-title">📋 Agendamentos Realizados</div>
-            <div class="agendamentos-table">
-                <table id="tabelaAgendamentos">
-                    <thead>
-                        <tr>
-                            <th>Professor</th>
-                            <th>Turma</th>
-                            <th>Qtd</th>
-                            <th>Data</th>
-                            <th>Retirada</th>
-                            <th>Devolução</th>
-                            <th>Observações</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+        <!-- Conteúdo das Tabs -->
+        <div id="tabAgendar" class="tab-content"></div>
+        <div id="tabListar" class="tab-content hidden"></div>
+        <div id="tabTurmas" class="tab-content hidden"></div>
+    </div>
+
+    <!-- Modal para Adicionar/Editar Turma -->
+    <div id="turmaModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 modal">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4 rounded-t-lg">
+                <h3 id="modalTitle" class="text-xl font-bold text-white">Adicionar Nova Turma</h3>
+            </div>
+            <div class="p-6">
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Nome da Turma</label>
+                <input type="text" id="turmaNome" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Ex: 5° Ano A">
+                <div id="modalError" class="error-message mt-2"></div>
+            </div>
+            <div class="flex gap-3 p-6 pt-0">
+                <button onclick="salvarTurma()" class="flex-1 bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition-all">
+                    Salvar
+                </button>
+                <button onclick="fecharModal()" class="flex-1 bg-gray-200 text-gray-700 font-semibold py-2 rounded-lg hover:bg-gray-300 transition-all">
+                    Cancelar
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Modal Gerenciar Turmas -->
-    <div id="modalTurmas" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">Gerenciar Turmas</div>
-            <div id="listaTurmas"></div>
-            <div class="form-group" style="margin-top: 20px;">
-                <input type="text" id="novaTurma" placeholder="Digite o nome da nova turma">
+    <!-- Modal de Confirmação de Cancelamento -->
+    <div id="confirmModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50 modal">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+            <div class="bg-gradient-to-r from-red-600 to-red-700 px-6 py-4 rounded-t-lg">
+                <h3 class="text-xl font-bold text-white">Confirmar Cancelamento</h3>
             </div>
-            <div class="button-group">
-                <button class="btn btn-primary" onclick="adicionarTurma()">Adicionar Turma</button>
-                <button class="btn btn-secondary" onclick="fecharModalTurmas()">Fechar</button>
+            <div class="p-6">
+                <p class="text-gray-700 mb-4">Tem certeza que deseja cancelar este agendamento?</p>
+                <p class="text-sm text-gray-500" id="confirmMessage"></p>
+            </div>
+            <div class="flex gap-3 p-6 pt-0">
+                <button onclick="confirmarCancelamento()" class="flex-1 bg-red-600 text-white font-semibold py-2 rounded-lg hover:bg-red-700 transition-all">
+                    Sim, Cancelar
+                </button>
+                <button onclick="fecharConfirmModal()" class="flex-1 bg-gray-200 text-gray-700 font-semibold py-2 rounded-lg hover:bg-gray-300 transition-all">
+                    Não, Manter
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Toast de notificação -->
-    <div id="toast" class="toast"></div>
+    <!-- Sistema de Notificações -->
+    <div id="notificationContainer" class="fixed bottom-4 right-4 z-50 space-y-2"></div>
 
     <script>
-        // ============ DADOS E CONFIGURAÇÕES ============
-        let agendamentos = [];
-        let turmas = [];
-        let totalDisponivel = 100;
-        
-        const horariosAulas = [
-            { periodo: "1ª Aula", inicio: "07:00", fim: "07:50" },
-            { periodo: "2ª Aula", inicio: "07:50", fim: "08:40" },
-            { periodo: "3ª Aula", inicio: "09:00", fim: "09:50" },
-            { periodo: "4ª Aula", inicio: "09:50", fim: "10:40" },
-            { periodo: "5ª Aula", inicio: "10:40", fim: "11:30" },
-            { periodo: "6ª Aula", inicio: "12:20", fim: "13:10" },
-            { periodo: "7ª Aula", inicio: "13:10", fim: "14:00" }
+        // ==================== CONFIGURAÇÕES ====================
+        const HORARIOS = [
+            { nome: "1º Horário (07:00 - 07:50)", inicio: "07:00", fim: "07:50" },
+            { nome: "2º Horário (07:50 - 08:40)", inicio: "07:50", fim: "08:40" },
+            { nome: "3º Horário (09:00 - 09:50)", inicio: "09:00", fim: "09:50" },
+            { nome: "4º Horário (09:50 - 10:40)", inicio: "09:50", fim: "10:40" },
+            { nome: "5º Horário (10:40 - 11:30)", inicio: "10:40", fim: "11:30" },
+            { nome: "6º Horário (12:20 - 13:10)", inicio: "12:20", fim: "13:10" },
+            { nome: "7º Horário (13:10 - 14:00)", inicio: "13:10", fim: "14:00" }
         ];
+
+        const DEFAULT_TURMAS = [
+            "6° Ano A", "6° Ano B", "6° Ano C",
+            "7° Ano A", "7° Ano B", "7° Ano C",
+            "8° Ano A", "8° Ano B", "8° Ano C",
+            "9° Ano A", "9° Ano B", "9° Ano C",
+            "1° Ano EM", "2° Ano EM", "3° Ano EM"
+        ];
+
+        const LIMITE_TOTAL = 36;
+        const STORAGE_KEY = 'chromebook_agendamentos';
+        const TURMAS_STORAGE_KEY = 'chromebook_turmas';
+
+        let agendamentoParaCancelar = null;
+        let modoEdicao = false;
+        let turmaEditando = null;
+        let filtroData = '';
+        let filtroProfessor = '';
+
+        // ==================== SISTEMA DE NOTIFICAÇÕES ====================
         
-        const horariosRetirada = ["07:00", "07:50", "09:00", "09:50", "10:40", "12:20", "13:10"];
-        const horariosDevolucao = ["07:50", "08:40", "09:50", "10:40", "11:30", "13:10", "14:00"];
-        
-        // ============ INICIALIZAÇÃO ============
-        function init() {
-            carregarDados();
-            carregarTurmas();
-            preencherHorarios();
-            document.getElementById('dataRetirada').valueAsDate = new Date();
-            document.getElementById('verificaData').valueAsDate = new Date();
-            document.getElementById('formAgendamento').addEventListener('submit', adicionarAgendamento);
-            document.getElementById('verificaData').addEventListener('change', atualizarDisponibilidade);
-            document.getElementById('filtroProfessor').addEventListener('input', aplicarFiltros);
-            document.getElementById('filtroData').addEventListener('change', aplicarFiltros);
-            atualizarDisponibilidade();
-            atualizarTabelaAgendamentos();
-            atualizarStats();
-        }
-        
-        function carregarDados() {
-            const saved = localStorage.getItem('chromebook_agendamentos_web');
-            if (saved) {
-                agendamentos = JSON.parse(saved);
-            } else {
-                // Dados de exemplo
-                const hoje = new Date().toISOString().split('T')[0];
-                agendamentos = [
-                    {
-                        id: Date.now(),
-                        professor: "Carla Mendes",
-                        turma: "8° Ano A",
-                        quantidade: 15,
-                        data: hoje,
-                        horaRetirada: "07:00",
-                        horaDevolucao: "08:40",
-                        observacoes: "Projeto de pesquisa"
-                    }
-                ];
-            }
-        }
-        
-        function carregarTurmas() {
-            const saved = localStorage.getItem('chromebook_turmas');
-            if (saved) {
-                turmas = JSON.parse(saved);
-            } else {
-                turmas = [
-                    "6° Ano A", "6° Ano B", "6° Ano C",
-                    "7° Ano A", "7° Ano B", "7° Ano C",
-                    "8° Ano A", "8° Ano B", "8° Ano C",
-                    "9° Ano A", "9° Ano B", "9° Ano C",
-                    "1° EM A", "1° EM B", "1° EM C",
-                    "2° EM A", "2° EM B", "2° EM C",
-                    "3° EM A", "3° EM B", "3° EM C"
-                ];
-            }
-            preencherSelectTurmas();
-        }
-        
-        function preencherSelectTurmas() {
-            const select = document.getElementById('turma');
-            select.innerHTML = '<option value="">Selecione uma turma</option>';
-            turmas.forEach(turma => {
-                const option = document.createElement('option');
-                option.value = turma;
-                option.textContent = turma;
-                select.appendChild(option);
-            });
-        }
-        
-        function preencherHorarios() {
-            const selectRetirada = document.getElementById('horarioRetirada');
-            const selectDevolucao = document.getElementById('horarioDevolucao');
+        function showNotification(message, type = 'success', duration = 3000) {
+            const container = document.getElementById('notificationContainer');
+            if (!container) return;
             
-            selectRetirada.innerHTML = '';
-            selectDevolucao.innerHTML = '';
-            
-            horariosRetirada.forEach(h => {
-                const option = document.createElement('option');
-                option.value = h;
-                option.textContent = h;
-                selectRetirada.appendChild(option);
-            });
-            
-            horariosDevolucao.forEach(h => {
-                const option = document.createElement('option');
-                option.value = h;
-                option.textContent = h;
-                selectDevolucao.appendChild(option);
-            });
-            
-            selectRetirada.value = "07:00";
-            selectDevolucao.value = "14:00";
-        }
-        
-        // ============ FUNÇÕES PRINCIPAIS ============
-        function salvarDados() {
-            localStorage.setItem('chromebook_agendamentos_web', JSON.stringify(agendamentos));
-            localStorage.setItem('chromebook_turmas', JSON.stringify(turmas));
-            atualizarStats();
-        }
-        
-        function verificarDisponibilidade(data, horaRetirada, horaDevolucao, quantidade, idIgnorar = null) {
-            let totalAgendado = 0;
-            
-            agendamentos.forEach(ag => {
-                if (idIgnorar && ag.id === idIgnorar) return;
-                if (ag.data !== data) return;
-                
-                // Verificar sobreposição de horários
-                const inicioExistente = ag.horaRetirada;
-                const fimExistente = ag.horaDevolucao;
-                
-                if (!(horaDevolucao <= inicioExistente || horaRetirada >= fimExistente)) {
-                    totalAgendado += ag.quantidade;
-                }
-            });
-            
-            const disponivel = totalDisponivel - totalAgendado;
-            return { disponivel, totalAgendado, quantidadeSuficiente: quantidade <= disponivel };
-        }
-        
-        function verificarDisponibilidadePorAula(data, aula) {
-            let totalAgendado = 0;
-            const horaInicio = aula.inicio;
-            const horaFim = aula.fim;
-            
-            agendamentos.forEach(ag => {
-                if (ag.data !== data) return;
-                
-                const inicioAg = ag.horaRetirada;
-                const fimAg = ag.horaDevolucao;
-                
-                if (!(horaFim <= inicioAg || horaInicio >= fimAg)) {
-                    totalAgendado += ag.quantidade;
-                }
-            });
-            
-            const disponivel = totalDisponivel - totalAgendado;
-            return { disponivel, totalAgendado };
-        }
-        
-        function adicionarAgendamento(e) {
-            e.preventDefault();
-            
-            const professor = document.getElementById('professor').value.trim();
-            const turma = document.getElementById('turma').value;
-            const quantidade = parseInt(document.getElementById('quantidade').value);
-            const data = document.getElementById('dataRetirada').value;
-            const horaRetirada = document.getElementById('horarioRetirada').value;
-            const horaDevolucao = document.getElementById('horarioDevolucao').value;
-            const observacoes = document.getElementById('observacoes').value;
-            
-            if (!professor || !turma) {
-                mostrarToast("Preencha todos os campos obrigatórios!", "error");
-                return;
-            }
-            
-            const { disponivel, quantidadeSuficiente } = verificarDisponibilidade(data, horaRetirada, horaDevolucao, quantidade);
-            
-            if (!quantidadeSuficiente) {
-                mostrarToast(`Quantidade indisponível! Apenas ${disponivel} chromebook(s) disponível(is) neste horário.`, "error");
-                return;
-            }
-            
-            const novoAgendamento = {
-                id: Date.now(),
-                professor,
-                turma,
-                quantidade,
-                data,
-                horaRetirada,
-                horaDevolucao,
-                observacoes
+            const notification = document.createElement('div');
+            const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
+            const colors = {
+                success: 'border-green-500 bg-green-50',
+                error: 'border-red-500 bg-red-50',
+                warning: 'border-yellow-500 bg-yellow-50',
+                info: 'border-blue-500 bg-blue-50'
+            };
+            const textColors = {
+                success: 'text-green-800',
+                error: 'text-red-800',
+                warning: 'text-yellow-800',
+                info: 'text-blue-800'
             };
             
-            agendamentos.push(novoAgendamento);
-            salvarDados();
-            limparFormulario();
-            atualizarTabelaAgendamentos();
-            atualizarDisponibilidade();
-            mostrarToast("Agendamento realizado com sucesso!", "success");
-        }
-        
-        function editarAgendamento(id) {
-            const ag = agendamentos.find(a => a.id === id);
-            if (!ag) return;
-            
-            document.getElementById('professor').value = ag.professor;
-            document.getElementById('turma').value = ag.turma;
-            document.getElementById('quantidade').value = ag.quantidade;
-            document.getElementById('dataRetirada').value = ag.data;
-            document.getElementById('horarioRetirada').value = ag.horaRetirada;
-            document.getElementById('horarioDevolucao').value = ag.horaDevolucao;
-            document.getElementById('observacoes').value = ag.observacoes;
-            
-            deletarAgendamento(id, false);
-            mostrarToast("Edite os dados e clique em Adicionar para salvar as alterações.", "info");
-        }
-        
-        function deletarAgendamento(id, confirmar = true) {
-            if (confirmar && !confirm("Tem certeza que deseja excluir este agendamento?")) return;
-            
-            agendamentos = agendamentos.filter(a => a.id !== id);
-            salvarDados();
-            atualizarTabelaAgendamentos();
-            atualizarDisponibilidade();
-            mostrarToast("Agendamento removido com sucesso!", "success");
-        }
-        
-        function limparFormulario() {
-            document.getElementById('professor').value = '';
-            document.getElementById('turma').value = '';
-            document.getElementById('quantidade').value = '10';
-            document.getElementById('dataRetirada').valueAsDate = new Date();
-            document.getElementById('horarioRetirada').value = "07:00";
-            document.getElementById('horarioDevolucao').value = "14:00";
-            document.getElementById('observacoes').value = '';
-        }
-        
-        // ============ ATUALIZAÇÃO DAS TABELAS ============
-        function atualizarDisponibilidade() {
-            const data = document.getElementById('verificaData').value;
-            if (!data) return;
-            
-            const tbody = document.querySelector('#tabelaDisponibilidade tbody');
-            tbody.innerHTML = '';
-            
-            horariosAulas.forEach(aula => {
-                const { disponivel, totalAgendado } = verificarDisponibilidadePorAula(data, aula);
-                
-                let status = '';
-                let statusClass = '';
-                if (disponivel <= 0) {
-                    status = '❌ INDISPONÍVEL';
-                    statusClass = 'status-indisponivel';
-                } else if (disponivel <= 30) {
-                    status = '⚠️ LIMITADO';
-                    statusClass = 'status-limitado';
-                } else {
-                    status = '✅ DISPONÍVEL';
-                    statusClass = 'status-disponivel';
-                }
-                
-                const row = tbody.insertRow();
-                row.insertCell(0).textContent = aula.periodo;
-                row.insertCell(1).textContent = aula.inicio;
-                row.insertCell(2).textContent = aula.fim;
-                row.insertCell(3).textContent = `${disponivel} / ${totalDisponivel}`;
-                row.insertCell(4).innerHTML = `<span class="${statusClass}">${status}</span>`;
-            });
-        }
-        
-        function atualizarTabelaAgendamentos(filtros = {}) {
-            let dadosFiltrados = [...agendamentos];
-            
-            if (filtros.professor) {
-                dadosFiltrados = dadosFiltrados.filter(a => 
-                    a.professor.toLowerCase().includes(filtros.professor.toLowerCase())
-                );
-            }
-            if (filtros.data) {
-                dadosFiltrados = dadosFiltrados.filter(a => a.data === filtros.data);
-            }
-            
-            dadosFiltrados.sort((a, b) => new Date(b.data) - new Date(a.data));
-            
-            const tbody = document.querySelector('#tabelaAgendamentos tbody');
-            tbody.innerHTML = '';
-            
-            if (dadosFiltrados.length === 0) {
-                const row = tbody.insertRow();
-                const cell = row.insertCell(0);
-                cell.colSpan = 8;
-                cell.textContent = "Nenhum agendamento encontrado";
-                cell.style.textAlign = "center";
-                cell.style.padding = "40px";
-                return;
-            }
-            
-            dadosFiltrados.forEach(ag => {
-                const row = tbody.insertRow();
-                row.insertCell(0).textContent = ag.professor;
-                row.insertCell(1).textContent = ag.turma;
-                row.insertCell(2).textContent = ag.quantidade;
-                row.insertCell(3).textContent = formatarData(ag.data);
-                row.insertCell(4).textContent = ag.horaRetirada;
-                row.insertCell(5).textContent = ag.horaDevolucao;
-                row.insertCell(6).textContent = ag.observacoes || '—';
-                
-                const acoesCell = row.insertCell(7);
-                acoesCell.className = 'action-buttons';
-                acoesCell.innerHTML = `
-                    <button class="icon-btn btn-edit" onclick="editarAgendamento(${ag.id})">✏️ Editar</button>
-                    <button class="icon-btn btn-delete" onclick="deletarAgendamento(${ag.id})">🗑️ Excluir</button>
-                `;
-            });
-        }
-        
-        function aplicarFiltros() {
-            const professor = document.getElementById('filtroProfessor').value;
-            const data = document.getElementById('filtroData').value;
-            atualizarTabelaAgendamentos({ professor, data });
-        }
-        
-        function limparFiltros() {
-            document.getElementById('filtroProfessor').value = '';
-            document.getElementById('filtroData').value = '';
-            atualizarTabelaAgendamentos({});
-        }
-        
-        function atualizarStats() {
-            document.getElementById('totalChromebooks').textContent = totalDisponivel;
-            const hoje = new Date().toISOString().split('T')[0];
-            const agendamentosHoje = agendamentos.filter(a => a.data === hoje).length;
-            document.getElementById('totalAgendamentos').textContent = agendamentosHoje;
-        }
-        
-        // ============ GERENCIAR TURMAS ============
-        function abrirModalTurmas() {
-            const modal = document.getElementById('modalTurmas');
-            const listaDiv = document.getElementById('listaTurmas');
-            
-            listaDiv.innerHTML = '<div class="form-group"><label>Turmas cadastradas:</label><select id="selectTurmas" size="10" style="width:100%; padding:10px;"></select></div>';
-            const select = document.getElementById('selectTurmas');
-            
-            turmas.forEach((turma, index) => {
-                const option = document.createElement('option');
-                option.value = index;
-                option.textContent = turma;
-                select.appendChild(option);
-            });
-            
-            const buttonGroup = document.createElement('div');
-            buttonGroup.className = 'button-group';
-            buttonGroup.style.marginTop = '10px';
-            buttonGroup.innerHTML = `
-                <button class="btn btn-secondary" onclick="editarTurma()">✏️ Editar</button>
-                <button class="btn btn-danger" onclick="removerTurma()">🗑️ Remover</button>
-                <button class="btn btn-primary" onclick="moverTurma(-1)">⬆️ Subir</button>
-                <button class="btn btn-primary" onclick="moverTurma(1)">⬇️ Descer</button>
+            notification.className = `notification ${colors[type]} border-l-4 rounded-lg shadow-lg p-4 min-w-[300px] transform transition-all duration-300`;
+            notification.innerHTML = `
+                <div class="flex items-start gap-3">
+                    <div class="text-2xl">${icons[type]}</div>
+                    <div class="flex-1">
+                        <p class="font-semibold ${textColors[type]}">${type === 'success' ? 'Sucesso!' : type === 'error' ? 'Erro!' : type === 'warning' ? 'Atenção!' : 'Informação'}</p>
+                        <p class="text-sm text-gray-600">${message}</p>
+                    </div>
+                    <button onclick="this.parentElement.parentElement.remove()" class="text-gray-400 hover:text-gray-600">✕</button>
+                </div>
             `;
-            listaDiv.appendChild(buttonGroup);
             
-            modal.style.display = 'flex';
+            container.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.style.opacity = '0';
+                    notification.style.transform = 'translateX(100%)';
+                    setTimeout(() => notification.remove(), 300);
+                }
+            }, duration);
         }
+
+        // ==================== FUNÇÕES DE GERENCIAMENTO DE TURMAS ====================
         
-        function adicionarTurma() {
-            const novaTurma = document.getElementById('novaTurma').value.trim();
-            if (novaTurma && !turmas.includes(novaTurma)) {
-                turmas.push(novaTurma);
-                salvarDados();
-                preencherSelectTurmas();
-                document.getElementById('novaTurma').value = '';
-                abrirModalTurmas();
-                mostrarToast("Turma adicionada com sucesso!", "success");
-            } else if (turmas.includes(novaTurma)) {
-                mostrarToast("Esta turma já existe!", "error");
+        function carregarTurmas() {
+            try {
+                const turmasSalvas = localStorage.getItem(TURMAS_STORAGE_KEY);
+                if (!turmasSalvas) {
+                    salvarTurmas(DEFAULT_TURMAS);
+                    return [...DEFAULT_TURMAS];
+                }
+                return JSON.parse(turmasSalvas);
+            } catch (error) {
+                console.error('Erro ao carregar turmas:', error);
+                return [...DEFAULT_TURMAS];
             }
         }
+
+        function salvarTurmas(turmas) {
+            try {
+                localStorage.setItem(TURMAS_STORAGE_KEY, JSON.stringify(turmas));
+                return true;
+            } catch (error) {
+                console.error('Erro ao salvar turmas:', error);
+                return false;
+            }
+        }
+
+        function adicionarTurma(nomeTurma) {
+            const turmas = carregarTurmas();
+            if (turmas.includes(nomeTurma)) {
+                showNotification('Esta turma já existe!', 'error');
+                return { sucesso: false, mensagem: 'Esta turma já existe!' };
+            }
+            turmas.push(nomeTurma);
+            turmas.sort();
+            salvarTurmas(turmas);
+            if (document.getElementById('formAgendamento')) atualizarGridTurmas();
+            const tabTurmas = document.getElementById('tabTurmas');
+            if (tabTurmas && !tabTurmas.classList.contains('hidden')) {
+                tabTurmas.innerHTML = renderizarGerenciadorTurmas();
+            }
+            showNotification(`Turma "${nomeTurma}" adicionada com sucesso!`, 'success');
+            return { sucesso: true, mensagem: 'Turma adicionada com sucesso!' };
+        }
+
+        function editarTurma(nomeAntigo, nomeNovo) {
+            const turmas = carregarTurmas();
+            const index = turmas.indexOf(nomeAntigo);
+            if (index === -1) {
+                showNotification('Turma não encontrada!', 'error');
+                return { sucesso: false, mensagem: 'Turma não encontrada!' };
+            }
+            if (nomeAntigo !== nomeNovo && turmas.includes(nomeNovo)) {
+                showNotification('Já existe uma turma com este nome!', 'error');
+                return { sucesso: false, mensagem: 'Já existe uma turma com este nome!' };
+            }
+            turmas[index] = nomeNovo;
+            turmas.sort();
+            salvarTurmas(turmas);
+            showNotification(`Turma "${nomeAntigo}" editada para "${nomeNovo}"!`, 'success');
+            return { sucesso: true, mensagem: 'Turma editada com sucesso!' };
+        }
+
+        function removerTurma(nomeTurma) {
+            const turmas = carregarTurmas();
+            const index = turmas.indexOf(nomeTurma);
+            if (index === -1) {
+                showNotification('Turma não encontrada!', 'error');
+                return { sucesso: false, mensagem: 'Turma não encontrada!' };
+            }
+            turmas.splice(index, 1);
+            salvarTurmas(turmas);
+            showNotification(`Turma "${nomeTurma}" removida com sucesso!`, 'success');
+            return { sucesso: true, mensagem: 'Turma removida com sucesso!' };
+        }
+
+        // ==================== FUNÇÕES DE PERSISTÊNCIA ====================
         
-        function editarTurma() {
-            const select = document.getElementById('selectTurmas');
-            const index = select.value;
-            if (index !== "") {
-                const novaTurma = prompt("Digite o novo nome da turma:", turmas[index]);
-                if (novaTurma && novaTurma.trim() && !turmas.includes(novaTurma.trim())) {
-                    turmas[index] = novaTurma.trim();
-                    salvarDados();
-                    preencherSelectTurmas();
-                    abrirModalTurmas();
-                    mostrarToast("Turma editada com sucesso!", "success");
-                } else if (turmas.includes(novaTurma)) {
-                    mostrarToast("Este nome já existe!", "error");
+        function salvarAgendamentos(agendamentos) {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(agendamentos));
+                return true;
+            } catch (error) {
+                console.error('Erro ao salvar:', error);
+                return false;
+            }
+        }
+
+        function carregarAgendamentos() {
+            try {
+                const dados = localStorage.getItem(STORAGE_KEY);
+                if (!dados) return [];
+                const agendamentos = JSON.parse(dados);
+                return agendamentos.map(ag => ({ ...ag, status: ag.status || 'ativo' }));
+            } catch (error) {
+                console.error('Erro ao carregar:', error);
+                return [];
+            }
+        }
+
+        function calcularDisponibilidadePorData(agendamentos, dataSelecionada) {
+            const disponibilidade = {};
+            HORARIOS.forEach(horario => {
+                disponibilidade[horario.nome] = LIMITE_TOTAL;
+            });
+            const agendamentosAtivos = agendamentos.filter(ag => ag.status === 'ativo' && ag.data === dataSelecionada);
+            agendamentosAtivos.forEach(agendamento => {
+                if (disponibilidade[agendamento.horarioRetirada] !== undefined) {
+                    disponibilidade[agendamento.horarioRetirada] -= agendamento.quantidade;
+                }
+                if (agendamento.horarioDevolucao && agendamento.horarioDevolucao !== agendamento.horarioRetirada) {
+                    if (disponibilidade[agendamento.horarioDevolucao] !== undefined) {
+                        disponibilidade[agendamento.horarioDevolucao] -= agendamento.quantidade;
+                    }
+                }
+            });
+            return disponibilidade;
+        }
+
+        function verificarDisponibilidade(data, horarioRetirada, horarioDevolucao, quantidade) {
+            const agendamentos = carregarAgendamentos();
+            const disponibilidadeAtual = calcularDisponibilidadePorData(agendamentos, data);
+            let disponivel = true;
+            const faltas = [];
+            const disponivelRetirada = disponibilidadeAtual[horarioRetirada];
+            if (disponivelRetirada < quantidade) {
+                disponivel = false;
+                faltas.push(`${horarioRetirada} (disponível: ${disponivelRetirada}/${quantidade})`);
+            }
+            if (horarioDevolucao !== horarioRetirada) {
+                const disponivelDevolucao = disponibilidadeAtual[horarioDevolucao];
+                if (disponivelDevolucao < quantidade) {
+                    disponivel = false;
+                    faltas.push(`${horarioDevolucao} (disponível: ${disponivelDevolucao}/${quantidade})`);
                 }
             }
+            return { disponivel, mensagem: disponivel ? 'Disponível' : `Capacidade insuficiente em: ${faltas.join(', ')}` };
         }
+
+        function adicionarAgendamento(novoAgendamento) {
+            const agendamentos = carregarAgendamentos();
+            novoAgendamento.id = Date.now();
+            novoAgendamento.status = 'ativo';
+            novoAgendamento.dataCriacao = new Date().toISOString();
+            agendamentos.push(novoAgendamento);
+            const salvou = salvarAgendamentos(agendamentos);
+            if (salvou) {
+                showNotification(`Agendamento realizado para ${novoAgendamento.professor} (${novoAgendamento.quantidade} chromebooks)`, 'success');
+                atualizarInterface();
+                return { sucesso: true, mensagem: '✅ Agendamento realizado com sucesso!' };
+            }
+            showNotification('Erro ao salvar agendamento!', 'error');
+            return { sucesso: false, mensagem: '❌ Erro ao salvar agendamento' };
+        }
+
+        function cancelarAgendamento(id) {
+            const agendamentos = carregarAgendamentos();
+            const index = agendamentos.findIndex(ag => ag.id === id);
+            if (index !== -1) {
+                const professor = agendamentos[index].professor;
+                agendamentos[index].status = 'cancelado';
+                agendamentos[index].dataCancelamento = new Date().toISOString();
+                const salvou = salvarAgendamentos(agendamentos);
+                if (salvou) {
+                    showNotification(`Agendamento de ${professor} cancelado com sucesso!`, 'warning');
+                    atualizarInterface();
+                    return { sucesso: true, mensagem: '✅ Agendamento cancelado com sucesso!' };
+                }
+            }
+            showNotification('Erro ao cancelar agendamento!', 'error');
+            return { sucesso: false, mensagem: '❌ Erro ao cancelar agendamento' };
+        }
+
+        function getAgendamentosFuturos() {
+            const agendamentos = carregarAgendamentos();
+            const hoje = new Date();
+            hoje.setHours(0, 0, 0, 0);
+            return agendamentos.filter(ag => {
+                const dataAg = new Date(ag.data);
+                return ag.status === 'ativo' && dataAg >= hoje;
+            }).sort((a, b) => new Date(a.data) - new Date(b.data));
+        }
+
+        // ==================== FUNÇÕES DE INTERFACE ====================
         
-        function removerTurma() {
-            const select = document.getElementById('selectTurmas');
-            const index = select.value;
-            if (index !== "" && confirm("Tem certeza que deseja remover esta turma?")) {
-                turmas.splice(index, 1);
-                salvarDados();
-                preencherSelectTurmas();
-                abrirModalTurmas();
-                mostrarToast("Turma removida com sucesso!", "success");
+        function atualizarTimestamp() {
+            const agora = new Date();
+            const horaFormatada = agora.toLocaleTimeString('pt-BR');
+            const dataFormatada = agora.toLocaleDateString('pt-BR');
+            const timestamp = document.getElementById('ultimaAtualizacao');
+            if (timestamp) {
+                timestamp.innerHTML = `🔄 Última atualização: ${dataFormatada} ${horaFormatada}`;
             }
         }
         
-        function moverTurma(direcao) {
-            const select = document.getElementById('selectTurmas');
-            const index = parseInt(select.value);
-            const novoIndex = index + direcao;
+        function renderizarTabelaHorarios() {
+            const dataSelecionada = document.getElementById('dataVisualizacao').value;
+            const tbody = document.getElementById('tabelaHorarios');
+            if (!tbody) return;
+            if (!dataSelecionada) {
+                tbody.innerHTML = '<tr><td colspan="3" class="px-6 py-8 text-center text-gray-500">📅 Selecione uma data acima para visualizar a disponibilidade</td></tr>';
+                return;
+            }
+            const agendamentos = carregarAgendamentos();
+            const disponibilidade = calcularDisponibilidadePorData(agendamentos, dataSelecionada);
+            tbody.innerHTML = HORARIOS.map(horario => {
+                const disponivel = disponibilidade[horario.nome];
+                const status = disponivel > 0;
+                const statusText = status ? 'Disponível' : 'Lotado';
+                const statusColor = status ? 'text-green-600' : 'text-red-600';
+                const statusBg = status ? 'bg-green-100' : 'bg-red-100';
+                const porcentagem = (disponivel / LIMITE_TOTAL) * 100;
+                const barraColor = disponivel > 10 ? 'bg-green-500' : (disponivel > 5 ? 'bg-yellow-500' : 'bg-red-500');
+                return `
+                    <tr class="hover:bg-gray-50 transition-all">
+                        <td class="px-6 py-4 whitespace-nowrap"><div class="text-sm font-bold text-gray-900">${horario.nome}</div></td>
+                        <td class="px-6 py-4">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-2xl font-bold ${statusColor}">${disponivel}</span>
+                                <span class="text-sm text-gray-500">/ ${LIMITE_TOTAL}</span>
+                                <div class="flex-1 max-w-xs">
+                                    <div class="bg-gray-200 rounded-full h-2 overflow-hidden">
+                                        <div class="${barraColor} h-2 rounded-full transition-all" style="width: ${porcentagem}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${statusBg} ${statusColor}">${statusText}</span>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            atualizarTimestamp();
+        }
+        
+        function onDataVisualizacaoChange() {
+            renderizarTabelaHorarios();
+        }
+
+        // ==================== FUNÇÕES DE EXPORTAÇÃO E FILTROS ====================
+        
+        function formatarData(dataString) {
+            const data = new Date(dataString);
+            return data.toLocaleDateString('pt-BR');
+        }
+        
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // Função de exportação - CORRIGIDA (problema do replace)
+        window.exportarAgendamentos = function() {
+            console.log('Função exportarAgendamentos chamada');
+            let agendamentos = getAgendamentosFuturos();
             
-            if (novoIndex >= 0 && novoIndex < turmas.length) {
-                [turmas[index], turmas[novoIndex]] = [turmas[novoIndex], turmas[index]];
-                salvarDados();
-                preencherSelectTurmas();
-                abrirModalTurmas();
-                setTimeout(() => {
-                    const newSelect = document.getElementById('selectTurmas');
-                    newSelect.value = novoIndex;
-                }, 100);
+            console.log('Agendamentos totais:', agendamentos.length);
+            console.log('Filtro data:', filtroData);
+            console.log('Filtro professor:', filtroProfessor);
+            
+            if (filtroData) {
+                agendamentos = agendamentos.filter(ag => ag.data === filtroData);
             }
-        }
-        
-        function fecharModalTurmas() {
-            document.getElementById('modalTurmas').style.display = 'none';
-        }
-        
-        // ============ EXPORTAÇÃO ============
-        function exportarRelatorio() {
+            if (filtroProfessor) {
+                agendamentos = agendamentos.filter(ag => ag.professor.toLowerCase().includes(filtroProfessor));
+            }
+            
+            console.log('Agendamentos após filtros:', agendamentos.length);
+            
             if (agendamentos.length === 0) {
-                mostrarToast("Não há dados para exportar!", "error");
+                showNotification('Nenhum agendamento para exportar com os filtros atuais!', 'warning');
                 return;
             }
             
-            let csv = "Professor,Turma,Quantidade,Data,Horário Retirada,Horário Devolução,Observações\n";
+            // Cabeçalho do CSV com BOM para UTF-8
+            let csvContent = "\uFEFFData,Professor,Turma,Quantidade,Horário Retirada,Horário Devolução,Observações\n";
+            
+            // Para cada agendamento, criar uma linha no CSV
             agendamentos.forEach(ag => {
-                csv += `"${ag.professor}","${ag.turma}",${ag.quantidade},"${ag.data}","${ag.horaRetirada}","${ag.horaDevolucao}","${ag.observacoes || ''}"\n`;
+                // Converter cada campo para string e escapar aspas
+                const dataStr = formatarData(ag.data).toString();
+                const professorStr = (ag.professor || '').toString().replace(/"/g, '""');
+                const turmaStr = (ag.turma || '').toString().replace(/"/g, '""');
+                const quantidadeStr = ag.quantidade.toString();
+                const horarioRetiradaStr = (ag.horarioRetirada || '').toString().replace(/"/g, '""');
+                const horarioDevolucaoStr = (ag.horarioDevolucao || '').toString().replace(/"/g, '""');
+                const observacoesStr = (ag.observacoes || '').toString().replace(/"/g, '""');
+                
+                // Montar a linha
+                const linha = `"${dataStr}","${professorStr}","${turmaStr}","${quantidadeStr}","${horarioRetiradaStr}","${horarioDevolucaoStr}","${observacoesStr}"`;
+                csvContent += linha + "\n";
             });
             
-            const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
-            const link = document.createElement("a");
+            // Criar e baixar o arquivo
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
             const url = URL.createObjectURL(blob);
             link.href = url;
-            link.setAttribute("download", `agendamentos_${new Date().toISOString().split('T')[0]}.csv`);
+            const dataSufixo = filtroData ? filtroData : 'todos';
+            const dataHoje = new Date().toISOString().split('T')[0];
+            link.setAttribute('download', `agendamentos_${dataSufixo}_${dataHoje}.csv`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
             URL.revokeObjectURL(url);
             
-            mostrarToast("Relatório exportado com sucesso!", "success");
+            showNotification(`Exportados ${agendamentos.length} agendamentos com sucesso!`, 'success');
+        };
+        
+        // Função para atualizar apenas o conteúdo da tabela sem recriar os filtros
+        function atualizarTabelaAgendamentos() {
+            let agendamentos = getAgendamentosFuturos();
+            
+            if (filtroData) {
+                agendamentos = agendamentos.filter(ag => ag.data === filtroData);
+            }
+            if (filtroProfessor) {
+                agendamentos = agendamentos.filter(ag => ag.professor.toLowerCase().includes(filtroProfessor));
+            }
+            
+            const containerTabela = document.getElementById('tabelaAgendamentosContainer');
+            if (!containerTabela) return;
+            
+            if (agendamentos.length === 0) {
+                containerTabela.innerHTML = `
+                    <div class="text-center py-12">
+                        <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        <p class="text-gray-500 text-lg mb-2">Nenhum agendamento encontrado</p>
+                        <p class="text-sm text-gray-400">${filtroData || filtroProfessor ? 'Tente outros filtros ou ' : ''}Clique em "Novo Agendamento" para começar</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const agendamentosPorData = {};
+            agendamentos.forEach(ag => {
+                if (!agendamentosPorData[ag.data]) agendamentosPorData[ag.data] = [];
+                agendamentosPorData[ag.data].push(ag);
+            });
+            
+            let html = '';
+            const datasOrdenadas = Object.keys(agendamentosPorData).sort();
+            for (const data of datasOrdenadas) {
+                const ags = agendamentosPorData[data];
+                const dataFormatada = formatarData(data);
+                html += `
+                    <div class="mb-8 last:mb-0">
+                        <div class="bg-gray-100 rounded-lg px-4 py-2 mb-3">
+                            <h3 class="font-bold text-gray-700">📅 ${dataFormatada}</h3>
+                            <p class="text-xs text-gray-500">${ags.length} agendamento(s)</p>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Professor</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Turma</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantidade</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Retirada</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Devolução</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Observações</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                `;
+                for (const ag of ags) {
+                    html += `
+                        <tr class="agendamento-row hover:bg-gray-50 transition-all">
+                            <td class="px-4 py-3 whitespace-nowrap"><div class="text-sm font-medium text-gray-900">${escapeHtml(ag.professor)}</div></td>
+                            <td class="px-4 py-3 whitespace-nowrap"><div class="text-sm text-gray-600">${escapeHtml(ag.turma)}</div></td>
+                            <td class="px-4 py-3 whitespace-nowrap"><div class="text-sm text-gray-600"><span class="font-semibold text-blue-600">${ag.quantidade}</span> unidades</div></td>
+                            <td class="px-4 py-3 whitespace-nowrap"><div class="text-sm text-gray-600">${escapeHtml(ag.horarioRetirada)}</div></td>
+                            <td class="px-4 py-3 whitespace-nowrap"><div class="text-sm text-gray-600">${escapeHtml(ag.horarioDevolucao)}</div></td>
+                            <td class="px-4 py-3"><div class="text-sm text-gray-600 max-w-xs truncate" title="${escapeHtml(ag.observacoes || '')}">${escapeHtml(ag.observacoes || '-')}</div></td>
+                            <td class="px-4 py-3 whitespace-nowrap">
+                                <button onclick="abrirModalCancelarObjeto(${ag.id})" class="text-red-600 hover:text-red-800 font-medium text-sm transition-all flex items-center gap-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                    </svg>
+                                    Cancelar
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }
+                html += `</tbody></td></div></div>`;
+            }
+            
+            containerTabela.innerHTML = html;
+            const totalSpan = document.getElementById('totalAgendamentos');
+            if (totalSpan) totalSpan.textContent = agendamentos.length;
         }
         
-        // ============ UTILITÁRIOS ============
-        function formatarData(data) {
-            if (!data) return '';
-            const partes = data.split('-');
-            return `${partes[2]}/${partes[1]}/${partes[0]}`;
+        // Função chamada quando o usuário digita no filtro de professor
+        window.onFiltroProfessorChange = function() {
+            const input = document.getElementById('filtroProfessor');
+            if (input) {
+                filtroProfessor = input.value.toLowerCase();
+                atualizarTabelaAgendamentos();
+            }
+        };
+        
+        // Função chamada quando o usuário seleciona uma data no filtro
+        window.onFiltroDataChange = function() {
+            const select = document.getElementById('filtroData');
+            if (select) {
+                filtroData = select.value;
+                atualizarTabelaAgendamentos();
+            }
+        };
+        
+        window.limparFiltros = function() {
+            filtroData = '';
+            filtroProfessor = '';
+            const inputData = document.getElementById('filtroData');
+            const inputProfessor = document.getElementById('filtroProfessor');
+            if (inputData) inputData.value = '';
+            if (inputProfessor) inputProfessor.value = '';
+            atualizarTabelaAgendamentos();
+            showNotification('Filtros limpos!', 'info');
+        };
+        
+        function abrirModalCancelar(agendamento) {
+            agendamentoParaCancelar = agendamento;
+            const confirmMessage = document.getElementById('confirmMessage');
+            if (confirmMessage) {
+                confirmMessage.innerHTML = `
+                    <strong>Professor:</strong> ${escapeHtml(agendamento.professor)}<br>
+                    <strong>Turma:</strong> ${escapeHtml(agendamento.turma)}<br>
+                    <strong>Data:</strong> ${formatarData(agendamento.data)}<br>
+                    <strong>Quantidade:</strong> ${agendamento.quantidade} chromebooks
+                `;
+            }
+            const modal = document.getElementById('confirmModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.style.display = 'flex';
+            }
         }
         
-        function mostrarToast(mensagem, tipo = "success") {
-            const toast = document.getElementById('toast');
-            toast.textContent = mensagem;
-            toast.style.backgroundColor = tipo === "success" ? "#10b981" : tipo === "error" ? "#ef4444" : "#3b82f6";
-            toast.style.display = "block";
-            setTimeout(() => {
-                toast.style.display = "none";
-            }, 3000);
+        function confirmarCancelamento() {
+            if (agendamentoParaCancelar) {
+                cancelarAgendamento(agendamentoParaCancelar.id);
+            }
+            fecharConfirmModal();
         }
         
-        // Adicionar botão de gerenciar turmas no header
-        const header = document.querySelector('.header');
-        const btnGerirTurmas = document.createElement('button');
-        btnGerirTurmas.textContent = '📚 Gerenciar Turmas';
-        btnGerirTurmas.className = 'btn btn-secondary';
-        btnGerirTurmas.onclick = abrirModalTurmas;
-        btnGerirTurmas.style.marginLeft = 'auto';
-        header.appendChild(btnGerirTurmas);
+        function fecharConfirmModal() {
+            const modal = document.getElementById('confirmModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.style.display = 'none';
+            }
+            agendamentoParaCancelar = null;
+        }
         
-        // Inicializar
+        window.abrirModalCancelarObjeto = function(id) {
+            const agendamentos = getAgendamentosFuturos();
+            const agendamento = agendamentos.find(ag => ag.id === id);
+            if (agendamento) abrirModalCancelar(agendamento);
+        };
+        
+        function renderizarListaAgendamentos() {
+            const container = document.getElementById('tabListar');
+            if (!container) return;
+            
+            const todasDatas = [...new Set(getAgendamentosFuturos().map(ag => ag.data))].sort();
+            
+            const html = `
+                <div class="bg-white rounded-lg shadow-xl overflow-hidden">
+                    <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4">
+                        <div class="flex justify-between items-center flex-wrap gap-4">
+                            <div>
+                                <h2 class="text-xl font-bold text-white">📋 Agendamentos Futuros</h2>
+                                <p class="text-blue-100 text-sm">Total: <span id="totalAgendamentos">0</span> agendamento(s) encontrado(s)</p>
+                            </div>
+                            <button onclick="window.exportarAgendamentos()" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-blue-50 transition-all text-sm">📊 Exportar Lista</button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Filtrar por Data</label>
+                                <select id="filtroData" onchange="window.onFiltroDataChange()" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                                    <option value="">Todas as datas</option>
+                                    ${todasDatas.map(data => `<option value="${data}" ${filtroData === data ? 'selected' : ''}>${formatarData(data)}</option>`).join('')}
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Filtrar por Professor</label>
+                                <input type="text" id="filtroProfessor" onkeyup="window.onFiltroProfessorChange()" value="${filtroProfessor.replace(/"/g, '&quot;')}" class="w-full px-4 py-2 border border-gray-300 rounded-lg" placeholder="Digite o nome do professor...">
+                            </div>
+                            <div class="flex items-end">
+                                <button onclick="window.limparFiltros()" class="w-full bg-gray-500 text-white font-semibold py-2 rounded-lg hover:bg-gray-600 transition-all">Limpar Filtros</button>
+                            </div>
+                        </div>
+                        <div id="tabelaAgendamentosContainer"></div>
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML = html;
+            atualizarTabelaAgendamentos();
+        }
+        
+        // ==================== FORMULÁRIO ====================
+        
+        function atualizarGridTurmas() {
+            const turmas = carregarTurmas();
+            const gridTurmas = document.getElementById('gridTurmas');
+            if (gridTurmas) {
+                gridTurmas.innerHTML = turmas.map(turma => `
+                    <button type="button" onclick="selecionarTurma('${turma.replace(/'/g, "\\'")}')" class="turma-option px-3 py-2 text-sm bg-gray-50 hover:bg-blue-50 border border-gray-200 rounded-lg text-gray-700 hover:text-blue-700 hover:border-blue-300 transition-all text-left">
+                        ${escapeHtml(turma)}
+                    </button>
+                `).join('');
+            }
+        }
+        
+        function selecionarTurma(turma) {
+            const inputTurma = document.getElementById('turma');
+            if (inputTurma) {
+                inputTurma.value = turma;
+                inputTurma.classList.add('border-green-500');
+                setTimeout(() => inputTurma.classList.remove('border-green-500'), 500);
+            }
+        }
+        
+        function renderizarFormulario() {
+            const hoje = new Date().toISOString().split('T')[0];
+            const turmas = carregarTurmas();
+            return `
+                <div class="bg-white rounded-lg shadow-xl overflow-hidden">
+                    <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4">
+                        <h2 class="text-xl font-bold text-white">📝 Novo Agendamento de Chromebooks</h2>
+                        <p class="text-blue-100 text-sm">Preencha todos os campos obrigatórios (*)</p>
+                    </div>
+                    <form id="formAgendamento" class="p-6 space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Professor *</label>
+                                <input type="text" id="professor" name="professor" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Nome do professor">
+                                <div class="error-message" id="error-professor"></div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Turma *</label>
+                                <input type="text" id="turma" name="turma" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Digite ou selecione uma turma abaixo">
+                                <div class="error-message" id="error-turma"></div>
+                                <div class="mt-3">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <label class="text-xs font-semibold text-gray-500">📋 Turmas disponíveis (${turmas.length}):</label>
+                                        <button type="button" onclick="showTab('turmas')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold">Gerenciar Turmas →</button>
+                                    </div>
+                                    <div id="gridTurmas" class="grid grid-cols-3 sm:grid-cols-5 gap-2 max-h-48 overflow-y-auto p-1">
+                                        ${turmas.map(turma => `
+                                            <button type="button" onclick="selecionarTurma('${turma.replace(/'/g, "\\'")}')" class="turma-option px-3 py-2 text-sm bg-gray-50 hover:bg-blue-50 border border-gray-200 rounded-lg text-gray-700 hover:text-blue-700 hover:border-blue-300 transition-all text-left">
+                                                ${escapeHtml(turma)}
+                                            </button>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Quantidade de Chromebooks * (1 a ${LIMITE_TOTAL})</label>
+                                <input type="number" id="quantidade" name="quantidade" required min="1" max="${LIMITE_TOTAL}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Número de unidades">
+                                <div class="error-message" id="error-quantidade"></div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Data do Agendamento *</label>
+                                <input type="date" id="data" name="data" required min="${hoje}" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                                <div class="error-message" id="error-data"></div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Horário de Retirada *</label>
+                                <select id="horarioRetirada" name="horarioRetirada" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                                    <option value="">Selecione...</option>
+                                    ${HORARIOS.map(h => `<option value="${h.nome}">${h.nome}</option>`).join('')}
+                                </select>
+                                <div class="error-message" id="error-horarioRetirada"></div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Horário de Devolução *</label>
+                                <select id="horarioDevolucao" name="horarioDevolucao" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                                    <option value="">Selecione...</option>
+                                    ${HORARIOS.map(h => `<option value="${h.nome}">${h.nome}</option>`).join('')}
+                                </select>
+                                <div class="error-message" id="error-horarioDevolucao"></div>
+                                <p class="text-xs text-gray-500 mt-1">💡 Pode ser o mesmo horário da retirada (uso durante a aula)</p>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Observações (opcional)</label>
+                                <textarea id="observacoes" name="observacoes" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Informações adicionais..."></textarea>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 pt-4">
+                            <button type="submit" class="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-3 px-6 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all transform hover:scale-105">📅 Agendar Chromebooks</button>
+                            <button type="button" onclick="limparFormulario()" class="px-6 py-3 bg-gray-200 text-gray-700 font-semibold rounded-lg hover:bg-gray-300 transition-all">Limpar</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+        }
+        
+        function limparFormulario() {
+            const campos = ['professor', 'turma', 'quantidade', 'data', 'horarioRetirada', 'horarioDevolucao', 'observacoes'];
+            campos.forEach(campo => {
+                const el = document.getElementById(campo);
+                if (el) el.value = '';
+            });
+            document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+            document.querySelectorAll('input, select').forEach(el => el.classList.remove('input-error'));
+        }
+        
+        function limparErros() {
+            document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+            document.querySelectorAll('input, select').forEach(el => el.classList.remove('input-error'));
+        }
+        
+        function handleSubmit(event) {
+            event.preventDefault();
+            limparErros();
+            const professor = document.getElementById('professor').value.trim();
+            const turma = document.getElementById('turma').value.trim();
+            const quantidade = parseInt(document.getElementById('quantidade').value);
+            const data = document.getElementById('data').value;
+            const horarioRetirada = document.getElementById('horarioRetirada').value;
+            const horarioDevolucao = document.getElementById('horarioDevolucao').value;
+            const observacoes = document.getElementById('observacoes').value.trim();
+            
+            let isValid = true;
+            if (!professor) {
+                document.getElementById('error-professor').textContent = 'Nome do professor é obrigatório';
+                document.getElementById('professor').classList.add('input-error');
+                isValid = false;
+            }
+            if (!turma) {
+                document.getElementById('error-turma').textContent = 'Turma é obrigatória';
+                document.getElementById('turma').classList.add('input-error');
+                isValid = false;
+            }
+            if (isNaN(quantidade) || quantidade < 1 || quantidade > LIMITE_TOTAL) {
+                document.getElementById('error-quantidade').textContent = `Quantidade deve ser entre 1 e ${LIMITE_TOTAL}`;
+                document.getElementById('quantidade').classList.add('input-error');
+                isValid = false;
+            }
+            if (!data) {
+                document.getElementById('error-data').textContent = 'Data é obrigatória';
+                document.getElementById('data').classList.add('input-error');
+                isValid = false;
+            } else {
+                const dataSelecionada = new Date(data);
+                const hoje = new Date();
+                hoje.setHours(0, 0, 0, 0);
+                if (dataSelecionada < hoje) {
+                    document.getElementById('error-data').textContent = 'Data não pode ser no passado';
+                    document.getElementById('data').classList.add('input-error');
+                    isValid = false;
+                }
+            }
+            if (!horarioRetirada) {
+                document.getElementById('error-horarioRetirada').textContent = 'Selecione o horário de retirada';
+                document.getElementById('horarioRetirada').classList.add('input-error');
+                isValid = false;
+            }
+            if (!horarioDevolucao) {
+                document.getElementById('error-horarioDevolucao').textContent = 'Selecione o horário de devolução';
+                document.getElementById('horarioDevolucao').classList.add('input-error');
+                isValid = false;
+            }
+            if (!isValid) return;
+            
+            const disponibilidade = verificarDisponibilidade(data, horarioRetirada, horarioDevolucao, quantidade);
+            if (!disponibilidade.disponivel) {
+                showNotification(disponibilidade.mensagem, 'error');
+                return;
+            }
+            
+            const novoAgendamento = { professor, turma, quantidade, data, horarioRetirada, horarioDevolucao, observacoes };
+            adicionarAgendamento(novoAgendamento);
+            limparFormulario();
+        }
+        
+        function atualizarInterface() {
+            renderizarTabelaHorarios();
+            if (document.getElementById('tabListar') && !document.getElementById('tabListar').classList.contains('hidden')) {
+                renderizarListaAgendamentos();
+            }
+            atualizarTimestamp();
+        }
+        
+        function showTab(tabId) {
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.add('hidden'));
+            if (tabId === 'agendar') {
+                document.getElementById('tabAgendar').classList.remove('hidden');
+                if (document.getElementById('formAgendamento')) atualizarGridTurmas();
+            } else if (tabId === 'listar') {
+                renderizarListaAgendamentos();
+                document.getElementById('tabListar').classList.remove('hidden');
+            } else if (tabId === 'turmas') {
+                document.getElementById('tabTurmas').innerHTML = renderizarGerenciadorTurmas();
+                document.getElementById('tabTurmas').classList.remove('hidden');
+            }
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('border-blue-500', 'text-blue-600');
+                btn.classList.add('border-transparent', 'text-gray-600');
+            });
+            const activeBtn = document.querySelector(`[data-tab="${tabId}"]`);
+            if (activeBtn) {
+                activeBtn.classList.remove('border-transparent', 'text-gray-600');
+                activeBtn.classList.add('border-blue-500', 'text-blue-600');
+            }
+        }
+        
+        function renderizarGerenciadorTurmas() {
+            const turmas = carregarTurmas();
+            return `
+                <div class="bg-white rounded-lg shadow-xl overflow-hidden">
+                    <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4 flex justify-between items-center flex-wrap gap-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-white">🏫 Gerenciar Turmas</h2>
+                            <p class="text-blue-100 text-sm">Adicione, edite ou remova turmas do sistema</p>
+                        </div>
+                        <button onclick="abrirModalAdicionar()" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-blue-50 transition-all">+ Nova Turma</button>
+                    </div>
+                    <div class="p-6">
+                        <div class="mb-4 text-sm text-gray-600">📊 Total de turmas cadastradas: <strong>${turmas.length}</strong></div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                            ${turmas.map(turma => `
+                                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200 hover:shadow-md transition-all">
+                                    <span class="font-medium text-gray-700">${escapeHtml(turma)}</span>
+                                    <div class="flex gap-2">
+                                        <button onclick="abrirModalEditar('${escapeHtml(turma)}')" class="text-blue-600 hover:text-blue-800 transition-all" title="Editar">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                                        </button>
+                                        <button onclick="confirmarRemoverTurma('${escapeHtml(turma)}')" class="text-red-600 hover:text-red-800 transition-all" title="Remover">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        ${turmas.length === 0 ? '<div class="text-center py-8 text-gray-500">Nenhuma turma cadastrada. Clique em "+ Nova Turma" para adicionar.</div>' : ''}
+                    </div>
+                </div>
+            `;
+        }
+        
+        function abrirModalAdicionar() {
+            modoEdicao = false;
+            turmaEditando = null;
+            document.getElementById('modalTitle').textContent = 'Adicionar Nova Turma';
+            document.getElementById('turmaNome').value = '';
+            document.getElementById('modalError').textContent = '';
+            document.getElementById('turmaModal').classList.remove('hidden');
+            document.getElementById('turmaModal').style.display = 'flex';
+        }
+        
+        function abrirModalEditar(nomeTurma) {
+            modoEdicao = true;
+            turmaEditando = nomeTurma;
+            document.getElementById('modalTitle').textContent = 'Editar Turma';
+            document.getElementById('turmaNome').value = nomeTurma;
+            document.getElementById('modalError').textContent = '';
+            document.getElementById('turmaModal').classList.remove('hidden');
+            document.getElementById('turmaModal').style.display = 'flex';
+        }
+        
+        function fecharModal() {
+            document.getElementById('turmaModal').classList.add('hidden');
+            document.getElementById('turmaModal').style.display = 'none';
+            modoEdicao = false;
+            turmaEditando = null;
+        }
+        
+        function salvarTurma() {
+            const nomeTurma = document.getElementById('turmaNome').value.trim();
+            if (!nomeTurma) {
+                document.getElementById('modalError').textContent = 'O nome da turma é obrigatório!';
+                return;
+            }
+            let resultado;
+            if (modoEdicao) resultado = editarTurma(turmaEditando, nomeTurma);
+            else resultado = adicionarTurma(nomeTurma);
+            if (resultado.sucesso) {
+                fecharModal();
+                document.getElementById('tabTurmas').innerHTML = renderizarGerenciadorTurmas();
+                if (document.getElementById('formAgendamento')) atualizarGridTurmas();
+            }
+        }
+        
+        function confirmarRemoverTurma(nomeTurma) {
+            if (confirm(`Tem certeza que deseja remover a turma "${nomeTurma}"?\n\nEsta ação não afetará agendamentos existentes.`)) {
+                removerTurma(nomeTurma);
+                document.getElementById('tabTurmas').innerHTML = renderizarGerenciadorTurmas();
+                if (document.getElementById('formAgendamento')) atualizarGridTurmas();
+            }
+        }
+        
+        // ==================== INICIALIZAÇÃO ====================
+        
+        function init() {
+            const hoje = new Date().toISOString().split('T')[0];
+            const dataVisualizacao = document.getElementById('dataVisualizacao');
+            if (dataVisualizacao) {
+                dataVisualizacao.value = hoje;
+                dataVisualizacao.addEventListener('change', onDataVisualizacaoChange);
+            }
+            renderizarTabelaHorarios();
+            document.getElementById('tabAgendar').innerHTML = renderizarFormulario();
+            const form = document.getElementById('formAgendamento');
+            if (form) form.addEventListener('submit', handleSubmit);
+            renderizarListaAgendamentos();
+            document.getElementById('tabTurmas').innerHTML = renderizarGerenciadorTurmas();
+            setTimeout(() => showNotification('Bem-vindo ao Sistema de Agendamento de Chromebooks!', 'info', 4000), 500);
+        }
+        
+        // Exportar funções globais necessárias
+        window.showTab = showTab;
+        window.confirmarCancelamento = confirmarCancelamento;
+        window.fecharConfirmModal = fecharConfirmModal;
+        window.limparFormulario = limparFormulario;
+        window.abrirModalAdicionar = abrirModalAdicionar;
+        window.abrirModalEditar = abrirModalEditar;
+        window.fecharModal = fecharModal;
+        window.salvarTurma = salvarTurma;
+        window.confirmarRemoverTurma = confirmarRemoverTurma;
+        
         init();
     </script>
 </body>
